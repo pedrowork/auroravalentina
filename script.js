@@ -99,33 +99,30 @@ function atualizarHorarios() {
     }
     
     const horarios = gerarHorarios();
-    let horariosDisponiveis = 0;
-    
-    horarios.forEach(horario => {
+    const disponiveis = horarios.filter(h => verificarDisponibilidade(dataSelecionada, h));
+
+    if (disponiveis.length === 0) {
         const option = document.createElement('option');
-        option.value = horario;
-        option.textContent = horario;
-        
-        if (verificarDisponibilidade(dataSelecionada, horario)) {
-            horariosDisponiveis++;
-        } else {
-            option.disabled = true;
-            option.textContent += ' (Ocupado)';
-        }
-        
+        option.value = '';
+        option.disabled = true;
+        option.textContent = 'Nenhum horário disponível';
         horarioSelect.appendChild(option);
-    });
-    
-    // Atualizar status
-    if (horariosDisponiveis > 0) {
-        statusInfo.className = 'status-info disponivel';
-        statusInfo.textContent = `✅ ${horariosDisponiveis} horários disponíveis nesta data`;
-        statusInfo.style.display = 'block';
-    } else {
         statusInfo.className = 'status-info indisponivel';
         statusInfo.textContent = '❌ Nenhum horário disponível nesta data';
         statusInfo.style.display = 'block';
+        return;
     }
+
+    disponiveis.forEach(horario => {
+        const option = document.createElement('option');
+        option.value = horario;
+        option.textContent = horario;
+        horarioSelect.appendChild(option);
+    });
+
+    statusInfo.className = 'status-info disponivel';
+    statusInfo.textContent = `✅ ${disponiveis.length} horários disponíveis nesta data`;
+    statusInfo.style.display = 'block';
 }
 
 // Fluxo de OAuth removido (usamos Netlify Functions com Service Account)
