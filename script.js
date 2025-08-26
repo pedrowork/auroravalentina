@@ -1,6 +1,6 @@
 // Configuração do Google Calendar API
 const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
-const SCOPES = 'https://www.googleapis.com/auth/calendar';
+const SCOPES = 'https://www.googleapis.com/auth/calendar.events'; // 'https://www.googleapis.com/auth/calendar';
 
 // Variáveis globais
 let tokenClient;
