@@ -2,6 +2,27 @@
 let agendamentosOcupados = new Set();
 let busyCacheByDate = new Map();
 
+// Consulta horários ocupados no backend (Netlify Function list-busy)
+async function carregarAgendamentosDaData(dataISO) {
+    try {
+        if (busyCacheByDate.has(dataISO)) {
+            const busy = busyCacheByDate.get(dataISO);
+            agendamentosOcupados = new Set(busy.map(h => `${dataISO}_${h}`));
+            return;
+        }
+        const resp = await fetch(`/api/list-busy?date=${encodeURIComponent(dataISO)}`);
+        if (!resp.ok) throw new Error('Falha ao consultar disponibilidade');
+        const json = await resp.json();
+        const busy = json.busy || [];
+        busyCacheByDate.set(dataISO, busy);
+        agendamentosOcupados = new Set(busy.map(h => `${dataISO}_${h}`));
+    } catch (e) {
+        console.warn('Não foi possível obter disponibilidade:', e);
+        agendamentosOcupados = new Set();
+    }
+}
+let busyCacheByDate = new Map();
+
 // Consulta horários ocupados no backend (calendário fixo do administrador)
 async function carregarAgendamentosDaData(dataISO) {
     try {
@@ -111,44 +132,7 @@ function atualizarHorarios() {
 
 // Função de carregamento via API removida
 
-// Criar evento no Google Calendar
-async function criarEventoCalendar(nome, parentesco, data, horario) {
-    const dataHora = new Date(`${data}T${horario}:00`);
-    const dataFim = new Date(dataHora.getTime() + 30 * 60000); // 30 minutos depois
-
-    const evento = {
-        'summary': `[Agendamento WhatsApp] ${nome}`,
-        'description': `Chamada de vídeo agendada\nNome: ${nome}\nParentesco: ${parentesco}\nPlataforma: WhatsApp`,
-        'start': {
-            'dateTime': dataHora.toISOString(),
-            'timeZone': CONFIG.TIMEZONE
-        },
-        'end': {
-            'dateTime': dataFim.toISOString(),
-            'timeZone': CONFIG.TIMEZONE
-        },
-        'reminders': {
-            'useDefault': false,
-            'overrides': [
-                {'method': 'popup', 'minutes': 15},
-                {'method': 'email', 'minutes': 60}
-            ]
-        }
-    };
-
-    try {
-        const request = window.gapi.client.calendar.events.insert({
-            'calendarId': 'primary',
-            'resource': evento
-        });
-
-        const response = await request;
-        return response.result;
-    } catch (err) {
-        console.error('Erro ao criar evento:', err);
-        throw err;
-    }
-}
+// Criação de evento é feita pelo backend (/api/create-event)
 
 // Submissão do formulário
 async function handleFormSubmit(e) {
