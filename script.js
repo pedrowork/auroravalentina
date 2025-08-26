@@ -262,7 +262,8 @@ async function handleFormSubmit(e) {
         nome: formData.get('nomeCompleto'),
         parentesco: formData.get('grauParentesco'),
         data: formData.get('dataAgendamento'),
-        horario: formData.get('horarioAgendamento')
+        horario: formData.get('horarioAgendamento'),
+        email: formData.get('emailContato') || undefined
     };
 
     // Validações

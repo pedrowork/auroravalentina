@@ -1,6 +1,10 @@
 [build]
   publish = "."
-  command = "echo 'No build command needed for static site'"
+  command = "npm ci --omit=dev || npm i --omit=dev"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
 
 [[headers]]
   for = "/*"
