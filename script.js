@@ -408,4 +408,4 @@ function simularAgendamentos() {
 }
 
 // Inicializar simulação (remover em produção quando integrar com Google Calendar)
-simularAgendamentos();
+// simularAgendamentos();
