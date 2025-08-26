@@ -1,0 +1,25 @@
+{
+  "name": "Agendamento WhatsApp",
+  "short_name": "Agendamento",
+  "description": "Sistema de agendamento de chamadas de vídeo via WhatsApp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#25D366",
+  "theme_color": "#25D366",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDI1NiAyNTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiByeD0iNDAiIGZpbGw9IiMyNUQzNjYiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9IndoaXRlIj4KICA8cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMGMxLjY5IDAgMy4yOS0uNDIgNC42OS0xLjE2TDIyIDIybC0xLjM0LTQuNjlDMjEuNTggMTUuMjkgMjIgMTMuNjkgMjIgMTJjMC01LjUyLTQuNDgtMTAtMTAtMTB6bTAtMmM2LjYzIDAgMTIgNS4zNyAxMiAxMiAwIDIuMDQtLjUxIDMuOTYtMS40MSA1LjY0TDI0IDI0bC02LjM2LTEuNDFDMTUuOTYgMjMuNDkgMTQuMDQgMjQgMTIgMjRjLTYuNjMgMC0xMi01LjM3LTEyLTEyUzUuMzcgMCAxMiAweiIvPgo8L3N2Zz4KPC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDI1NiAyNTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiByeD0iNDAiIGZpbGw9IiMyNUQzNjYiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9IndoaXRlIj4KICA8cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMGMxLjY5IDAgMy4yOS0uNDIgNC42OS0xLjE2TDIyIDIybC0xLjM0LTQuNjlDMjEuNTggMTUuMjkgMjIgMTMuNjkgMjIgMTJjMC01LjUyLTQuNDgtMTAtMTAtMTB6bTAtMmM2LjYzIDAgMTIgNS4zNyAxMiAxMiAwIDIuMDQtLjUxIDMuOTYtMS40MSA1LjY0TDI0IDI0bC02LjM2LTEuNDFDMTUuOTYgMjMuNDkgMTQuMDQgMjQgMTIgMjRjLTYuNjMgMC0xMi01LjM3LTEyLTEyUzUuMzcgMCAxMiAweiIvPgo8L3N2Zz4KPC9zdmc+",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["business", "productivity", "communication"],
+  "lang": "pt-BR"
+}

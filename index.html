@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Chamada de Vídeo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#25D366">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Agendamento WhatsApp">
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Agendar Chamada de Vídeo</h1>
+            <p>Reserve seu horário para uma conversa pelo WhatsApp</p>
+        </div>
+
+        <form id="agendamentoForm" class="form-container">
+            <div class="form-group">
+                <label for="nomeCompleto">Nome Completo *</label>
+                <input type="text" id="nomeCompleto" name="nomeCompleto" required>
+            </div>
+
+            <div class="form-group">
+                <label for="grauParentesco">Grau de Parentesco *</label>
+                <select id="grauParentesco" name="grauParentesco" required>
+                    <option value="">Selecione...</option>
+                    <option value="Família">Família</option>
+                    <option value="Amigo">Amigo</option>
+                    <option value="Próximo da Família">Próximo da Família</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dataAgendamento">Data *</label>
+                <input type="date" id="dataAgendamento" name="dataAgendamento" required>
+            </div>
+
+            <div class="form-group">
+                <label for="horarioAgendamento">Horário *</label>
+                <select id="horarioAgendamento" name="horarioAgendamento" required>
+                    <option value="">Primeiro selecione uma data</option>
+                </select>
+            </div>
+
+            <div class="status-container">
+                <div id="statusInfo" class="status-info"></div>
+            </div>
+
+            <button type="submit" id="agendarBtn" class="btn-agendar">
+                Agendar Chamada
+            </button>
+        </form>
+
+        <div id="successMessage" class="success-message" style="display: none;">
+            <h3>✅ Agendamento Confirmado!</h3>
+            <p>Sua chamada foi agendada com sucesso.</p>
+            <button id="whatsappBtn" class="btn-whatsapp">
+                🚀 Ir para WhatsApp
+            </button>
+        </div>
+
+        <div class="info-section">
+            <h3>🕐 Horários Disponíveis</h3>
+            <div class="horarios-info">
+                <div class="periodo">
+                    <strong>Manhã:</strong> 09:00 às 11:00
+                </div>
+                <div class="periodo">
+                    <strong>Tarde:</strong> 14:00 às 17:00
+                </div>
+                <p class="intervalo">Intervalos de 10 minutos</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
