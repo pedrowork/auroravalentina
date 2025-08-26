@@ -1,46 +1,5 @@
-// Configuração do Google Calendar API
-const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
-const SCOPES = 'https://www.googleapis.com/auth/calendar.events'; // 'https://www.googleapis.com/auth/calendar';
-
-// Variáveis globais
-let tokenClient;
-let gapiInited = false;
-let gisInited = false;
-let isAuthorized = false;
-
 // Estado do agendamento
 let agendamentosOcupados = new Set();
-
-// Utilidades para aguardar carregamento das APIs do Google (até 10s)
-async function ensureGapiLoaded(timeoutMs = 10000) {
-    const start = Date.now();
-    return new Promise(resolve => {
-        const interval = setInterval(() => {
-            if (window.gapi && typeof window.gapi.load === 'function') {
-                clearInterval(interval);
-                resolve(true);
-            } else if (Date.now() - start > timeoutMs) {
-                clearInterval(interval);
-                resolve(false);
-            }
-        }, 100);
-    });
-}
-
-async function ensureGISLoaded(timeoutMs = 10000) {
-    const start = Date.now();
-    return new Promise(resolve => {
-        const interval = setInterval(() => {
-            if (window.google && window.google.accounts && window.google.accounts.oauth2) {
-                clearInterval(interval);
-                resolve(true);
-            } else if (Date.now() - start > timeoutMs) {
-                clearInterval(interval);
-                resolve(false);
-            }
-        }, 100);
-    });
-}
 
 // Elementos DOM
 const form = document.getElementById('agendamentoForm');
