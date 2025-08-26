@@ -21,27 +21,6 @@ async function carregarAgendamentosDaData(dataISO) {
         agendamentosOcupados = new Set();
     }
 }
-let busyCacheByDate = new Map();
-
-// Consulta horários ocupados no backend (calendário fixo do administrador)
-async function carregarAgendamentosDaData(dataISO) {
-    try {
-        if (busyCacheByDate.has(dataISO)) {
-            const busy = busyCacheByDate.get(dataISO);
-            agendamentosOcupados = new Set(busy.map(h => `${dataISO}_${h}`));
-            return;
-        }
-        const resp = await fetch(`/api/list-busy?date=${encodeURIComponent(dataISO)}`);
-        if (!resp.ok) throw new Error('Falha ao consultar disponibilidade');
-        const json = await resp.json();
-        const busy = json.busy || [];
-        busyCacheByDate.set(dataISO, busy);
-        agendamentosOcupados = new Set(busy.map(h => `${dataISO}_${h}`));
-    } catch (e) {
-        console.warn('Não foi possível obter disponibilidade:', e);
-        agendamentosOcupados = new Set();
-    }
-}
 
 // Elementos DOM
 const form = document.getElementById('agendamentoForm');
