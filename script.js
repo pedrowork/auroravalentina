@@ -127,92 +127,9 @@ function atualizarHorarios() {
     }
 }
 
-// Configuração inicial do Google API
-async function initializeGapi() {
-    await window.gapi.load('client', initializeGapiClient);
-}
+// Fluxo de OAuth removido (usamos Netlify Functions com Service Account)
 
-async function initializeGapiClient() {
-    await window.gapi.client.init({
-        apiKey: CONFIG.GOOGLE_API_KEY,
-        discoveryDocs: [DISCOVERY_DOC],
-    });
-    gapiInited = true;
-    maybeEnableButtons();
-}
-
-function initializeGis() {
-    tokenClient = window.google.accounts.oauth2.initTokenClient({
-        client_id: CONFIG.GOOGLE_CLIENT_ID,
-        scope: SCOPES,
-        callback: '', // definido na autorização
-    });
-    gisInited = true;
-    maybeEnableButtons();
-}
-
-function maybeEnableButtons() {
-    if (gapiInited && gisInited) {
-        console.log('Google APIs inicializadas com sucesso');
-        verificarStatusAPIs();
-    }
-}
-
-// Autorizar acesso ao Google Calendar
-function handleAuthClick() {
-    if (!tokenClient) {
-        alert('Serviço de identidade do Google ainda não carregou. Aguarde alguns segundos e tente novamente.');
-        return;
-    }
-    tokenClient.callback = async (resp) => {
-        if (resp.error !== undefined) {
-            console.error('Erro na autorização:', resp);
-            alert('Erro na autorização. Tente novamente.');
-            return;
-        }
-        isAuthorized = true;
-        verificarStatusAPIs();
-        await carregarAgendamentos();
-    };
-
-    if (window.gapi.client.getToken() === null) {
-        tokenClient.requestAccessToken({prompt: 'consent'});
-    } else {
-        tokenClient.requestAccessToken({prompt: ''});
-    }
-}
-
-// Carregar agendamentos existentes do Google Calendar
-async function carregarAgendamentos() {
-    try {
-        const request = {
-            'calendarId': 'primary',
-            'timeMin': (new Date()).toISOString(),
-            'showDeleted': false,
-            'singleEvents': true,
-            'maxResults': 100,
-            'orderBy': 'startTime'
-        };
-
-        const response = await window.gapi.client.calendar.events.list(request);
-        const eventos = response.result.items;
-
-        agendamentosOcupados.clear();
-
-        eventos.forEach(evento => {
-            if (evento.summary && evento.summary.includes('[Agendamento WhatsApp]')) {
-                const inicio = new Date(evento.start.dateTime);
-                const data = inicio.toISOString().split('T')[0];
-                const horario = inicio.toTimeString().substring(0, 5);
-                agendamentosOcupados.add(`${data}_${horario}`);
-            }
-        });
-
-        atualizarHorarios();
-    } catch (err) {
-        console.error('Erro ao carregar agendamentos:', err);
-    }
-}
+// Função de carregamento via API removida
 
 // Criar evento no Google Calendar
 async function criarEventoCalendar(nome, parentesco, data, horario) {
@@ -328,71 +245,28 @@ async function handleFormSubmit(e) {
     }
 }
 
-// Adicionar botão de autorização do Google
-function adicionarBotaoAutorizacao() {
-    if (document.getElementById('autorizeBtn')) return;
-    
-    const statusContainer = document.querySelector('.status-container');
-    const botaoAutorizar = document.createElement('button');
-    botaoAutorizar.id = 'autorizeBtn';
-    botaoAutorizar.type = 'button';
-    botaoAutorizar.className = 'btn-agendar';
-    botaoAutorizar.innerHTML = '🔐 Autorizar Google Calendar';
-    botaoAutorizar.style.marginBottom = '20px';
-    botaoAutorizar.onclick = handleAuthClick;
-    
-    statusContainer.parentNode.insertBefore(botaoAutorizar, statusContainer);
-}
+// Sem botão de autorização - backend cuida do acesso
 
-// Verificar status de inicialização das APIs
 function verificarStatusAPIs() {
     const statusElement = document.getElementById('statusInfo');
-    
-    if (!gapiInited || !gisInited) {
-        statusElement.className = 'status-info indisponivel';
-        statusElement.textContent = '⚠️ Carregando APIs do Google...';
-        statusElement.style.display = 'block';
-        return;
-    }
-    
-    if (!isAuthorized) {
-        statusElement.className = 'status-info indisponivel';
-        statusElement.textContent = '🔐 Autorização necessária para acessar o Google Calendar';
-        statusElement.style.display = 'block';
-        adicionarBotaoAutorizacao();
-        return;
-    }
-    
-    statusElement.style.display = 'none';
-    const botaoAutorizar = document.getElementById('autorizeBtn');
-    if (botaoAutorizar) {
-        botaoAutorizar.remove();
-    }
+    statusElement.className = 'status-info agendado';
+    statusElement.textContent = 'Selecione a data para consultar disponibilidade.';
+    statusElement.style.display = 'block';
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', async () => {
     configurarDataMinima();
-    dataInput.addEventListener('change', atualizarHorarios);
+    dataInput.addEventListener('change', async () => {
+        if (dataInput.value) {
+            await carregarAgendamentosDaData(dataInput.value);
+        }
+        atualizarHorarios();
+    });
     form.addEventListener('submit', handleFormSubmit);
     
     // Verificar status inicial
     verificarStatusAPIs();
-    
-    // Tentar carregar as APIs do Google de forma resiliente
-    const gapiOk = await ensureGapiLoaded();
-    if (gapiOk) {
-        try { await initializeGapi(); } catch (e) { console.error('Falha ao inicializar gapi:', e); }
-    } else {
-        console.warn('Google API não carregada (timeout)');
-    }
-
-    const gisOk = await ensureGISLoaded();
-    if (gisOk) {
-        try { initializeGis(); } catch (e) { console.error('Falha ao inicializar GIS:', e); }
-    } else {
-        console.warn('Google Identity Services não carregado (timeout)');
-    }
 });
 
 // Simular agendamentos para demonstração (remover em produção)
